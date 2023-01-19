@@ -13,9 +13,8 @@ public class PathMovement : MonoBehaviour
     public int currentDough;
     public bool giveDough;
     public Transform doughStackPoint;
-
     public GameObject breadDough;
-
+    public List<GameObject> breadDoughList;
 
 
     public float timer = 1f;
@@ -50,8 +49,9 @@ public class PathMovement : MonoBehaviour
         doughStackPoint.position += new Vector3(0, .5f, 0);
         GameObject newBreadDough = Instantiate(breadDough);
         newBreadDough.transform.transform.parent = transform;
-
         newBreadDough.transform.position = doughStackPoint.position;
+        breadDoughList.Add(newBreadDough);
+
 
         //breadDough.transform.SetParent(transform, true);
         Debug.Log("Hamur stackle");
