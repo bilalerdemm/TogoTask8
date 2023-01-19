@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using PathCreation;
+using UnityEngine.UIElements;
 
 public class PathMovement : MonoBehaviour
 {
@@ -11,6 +12,11 @@ public class PathMovement : MonoBehaviour
 
     public int currentDough;
     public bool giveDough;
+    public Transform doughStackPoint;
+
+    public GameObject breadDough;
+
+
 
     public float timer = 1f;
     void Update()
@@ -41,6 +47,13 @@ public class PathMovement : MonoBehaviour
         giveDough = false;
         timer = 1f;
         currentDough++;
+        doughStackPoint.position += new Vector3(0, .5f, 0);
+        GameObject newBreadDough = Instantiate(breadDough);
+        newBreadDough.transform.transform.parent = transform;
+
+        newBreadDough.transform.position = doughStackPoint.position;
+
+        //breadDough.transform.SetParent(transform, true);
         Debug.Log("Hamur stackle");
         //StartCoroutine(DoughStackMechanic());
     }
