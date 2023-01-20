@@ -16,6 +16,8 @@ public class PathMovement : MonoBehaviour
     public GameObject breadDough;
     public List<GameObject> breadDoughList;
 
+    public GameObject breadDoughPoint;
+
 
     public float timer = 1f;
     void Update()
@@ -40,9 +42,15 @@ public class PathMovement : MonoBehaviour
         {
             DoughStackMechanic();
         }
+        if (other.gameObject.CompareTag("GiveDough"))
+        {
+            //Debug.Log("Hmaurlari ver ");
+            GiveDoughMechanic();
+        }
     }
     void DoughStackMechanic()
     {
+        Debug.Log("Hamur stackle");
         giveDough = false;
         timer = 1f;
         currentDough++;
@@ -51,10 +59,18 @@ public class PathMovement : MonoBehaviour
         newBreadDough.transform.transform.parent = transform;
         newBreadDough.transform.position = doughStackPoint.position;
         breadDoughList.Add(newBreadDough);
-
-
-        //breadDough.transform.SetParent(transform, true);
-        Debug.Log("Hamur stackle");
-        //StartCoroutine(DoughStackMechanic());
+    }
+    void GiveDoughMechanic()
+    {
+        if (breadDoughList.Count > 0)
+        {
+            for (int i = 0; i < breadDoughList.Count; i++)
+            {
+                Debug.Log("Hamurlari ver ");
+                breadDoughList[breadDoughList.Count - 1].gameObject.transform.parent = breadDoughPoint.transform;
+                breadDoughList[breadDoughList.Count - 1].gameObject.transform.position = breadDoughPoint.transform.position;
+                breadDoughList.Remove(breadDoughList[breadDoughList.Count - 1].gameObject);
+            }
+        }
     }
 }
