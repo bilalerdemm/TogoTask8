@@ -12,11 +12,10 @@ public class PathMovement : MonoBehaviour
     public float speed = 5f;
     float distanceTravelled;
 
-    public int currentDough;
     public bool giveDough;
 
     public bool isPlayerTakeDough = false;
-    
+
     public bool giveBread;
     public Transform doughMachine;
     public Transform doughStackPoint;
@@ -32,6 +31,8 @@ public class PathMovement : MonoBehaviour
     public float stackTimer = 0f;
     public float breadTimer = 2f;
 
+
+
     void Update()
     {
         if (Input.GetMouseButton(0))
@@ -46,7 +47,7 @@ public class PathMovement : MonoBehaviour
         if (stackTimer >= 1)
         {
             giveDough = true;
-            
+
         }
 
 
@@ -61,14 +62,21 @@ public class PathMovement : MonoBehaviour
         if (isPlayerTakeDough)
         {
             fillImage1.fillAmount = stackTimer;
+            if (breadDoughList.Count >= 5)
+            {
+                giveDough = false;
+                fillImage1.fillAmount = 0;
+            }
         }
     }
     private void OnTriggerStay(Collider other)
     {
-        if (other.gameObject.CompareTag("DoughStack") && currentDough <= 4 && giveDough)
+
+        if (other.gameObject.CompareTag("DoughStack") && breadDoughList.Count <= 4 && giveDough)
         {
             //Debug.Log("Hamur stackle");
             DoughStackMechanic();
+
         }
         if (other.gameObject.CompareTag("GiveDough"))
         {
@@ -77,33 +85,39 @@ public class PathMovement : MonoBehaviour
             //InvokeRepeating("BakingBread", 2f, .05f);
             BakingBread();
         }
+
     }
     private void OnTriggerExit(Collider other)
     {
         if (other.gameObject.CompareTag("DoughStack"))
         {
             isPlayerTakeDough = false;
+            breadTimer = 0;
+            fillImage1.fillAmount = 0;
+            giveDough = true;
         }
     }
     void DoughStackMechanic()
     {
+
         Debug.Log("Hamur stackle");
         isPlayerTakeDough = true;
         giveDough = false;
         stackTimer = 0f;
-        currentDough++;
-
-        if (isPlayerTakeDough)
+        if (fillImage1.fillAmount >= 1f)
         {
-            GameObject newBreadDough = Instantiate(breadDough, doughMachine.transform.parent);
-            newBreadDough.transform.parent = doughStackPoint.transform;
-            newBreadDough.transform.DOMove(doughStackPoint.transform.position, .3f);
-            doughStackPoint.position += new Vector3(0, .5f, 0);
-            //newBreadDough.transform.parent = transform;
-            //newBreadDough.transform.position = doughStackPoint.position;
-            breadDoughList.Add(newBreadDough);
+            if (isPlayerTakeDough)
+            {
+                Debug.Log("If icine girildi.");
+                GameObject newBreadDough = Instantiate(breadDough, doughMachine.transform.parent);
+                //newBreadDough.transform.parent = doughStackPoint.transform;
+                newBreadDough.transform.DOMove(doughStackPoint.transform.position, .03f);
+                doughStackPoint.position += new Vector3(0, .5f, 0);
+                newBreadDough.transform.parent = transform;
+                //newBreadDough.transform.position = doughStackPoint.position;
+                breadDoughList.Add(newBreadDough);
+            }
         }
-
     }
     void GiveDoughMechanic()
     {
