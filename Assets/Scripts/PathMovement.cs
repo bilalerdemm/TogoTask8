@@ -13,12 +13,11 @@ public class PathMovement : MonoBehaviour
     float distanceTravelled;
 
     public bool giveDough;
-
     public bool isPlayerTakeDough = false;
-
     public bool giveBread;
     public Transform doughMachine;
-    public Transform doughStackPoint;
+    public Transform  doughStackPoint;
+    public Vector3 firstDoughStackPoint;
     public GameObject breadDough;
     public List<GameObject> breadDoughList;
     public List<GameObject> bakedBreadList;
@@ -31,7 +30,10 @@ public class PathMovement : MonoBehaviour
     public float stackTimer = 0f;
     public float breadTimer = 2f;
 
-
+    private void Awake()
+    {
+        firstDoughStackPoint = doughStackPoint.localPosition;
+    }
 
     void Update()
     {
@@ -39,6 +41,7 @@ public class PathMovement : MonoBehaviour
         {
             distanceTravelled += speed * Time.deltaTime;
             transform.position = pathCreator.path.GetPointAtDistance(distanceTravelled) + new Vector3(0, 4, 0);
+            transform.rotation = pathCreator.path.GetRotationAtDistance(distanceTravelled);
         }
         if (stackTimer < 1)
         {
@@ -49,16 +52,6 @@ public class PathMovement : MonoBehaviour
             giveDough = true;
 
         }
-
-
-        if (breadTimer > 0)
-        {
-            breadTimer -= Time.deltaTime;
-        }
-        if (breadTimer <= 0)
-        {
-            giveBread = true;
-        }
         if (isPlayerTakeDough)
         {
             fillImage1.fillAmount = stackTimer;
@@ -68,18 +61,29 @@ public class PathMovement : MonoBehaviour
                 fillImage1.fillAmount = 0;
             }
         }
+        #region
+        if (breadTimer > 0)
+        {
+            breadTimer -= Time.deltaTime;
+        }
+        if (breadTimer <= 0)
+        {
+            giveBread = true;
+        }
+        #endregion
     }
     private void OnTriggerStay(Collider other)
     {
-
         if (other.gameObject.CompareTag("DoughStack") && breadDoughList.Count <= 4 && giveDough)
         {
-            //Debug.Log("Hamur stackle");
+            //HAMUR STACKLEDIGIMIZ YER.
             DoughStackMechanic();
 
         }
+
         if (other.gameObject.CompareTag("GiveDough"))
         {
+            doughStackPoint.localPosition = firstDoughStackPoint;
             //HAMURLARI FIRINA VERDIGIMIZ YER 
             GiveDoughMechanic();
             //InvokeRepeating("BakingBread", 2f, .05f);
@@ -119,6 +123,7 @@ public class PathMovement : MonoBehaviour
             }
         }
     }
+    #region
     void GiveDoughMechanic()
     {
         if (breadDoughList.Count > 0)
@@ -166,4 +171,5 @@ public class PathMovement : MonoBehaviour
         }
         */
     }
+    #endregion
 }

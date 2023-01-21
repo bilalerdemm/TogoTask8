@@ -4060,6 +4060,7 @@ MonoBehaviour:
   giveBread: 0
   doughMachine: {fileID: 696428868}
   doughStackPoint: {fileID: 410271402}
+  firstDoughStackPoint: {x: 0, y: 0, z: 0}
   breadDough: {fileID: 919132149155446097, guid: 2b848d11a621a3b4d8c0bea1b8f96bb2, type: 3}
   breadDoughList: []
   bakedBreadList: []
@@ -4911,7 +4912,7 @@ MonoBehaviour:
       - {x: -2.4802485, y: 0, z: 0.4506163}
       - {x: -2.579751, y: 0, z: 0.31660435}
       isClosed: 1
-      space: 2
+      space: 0
       controlMode: 0
       autoControlLength: 0.3
       boundsUpToDate: 0
@@ -4931,7 +4932,7 @@ MonoBehaviour:
       - 0
       - 0
       - 0
-      globalNormalsAngle: 0
+      globalNormalsAngle: 90
       flipNormals: 0
     vertexPathUpToDate: 1
     vertexPathMaxAngleError: 0.3
@@ -4946,11 +4947,11 @@ MonoBehaviour:
     keepConstantHandleSize: 0
     showNormalsInVertexMode: 0
     showBezierPathInVertexMode: 0
-    showDisplayOptions: 0
+    showDisplayOptions: 1
     showPathOptions: 1
     showVertexPathDisplayOptions: 0
     showVertexPathOptions: 1
-    showNormals: 0
+    showNormals: 1
     showNormalsHelpInfo: 0
     tabIndex: 0
   initialized: 1
