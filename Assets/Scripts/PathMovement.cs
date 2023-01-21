@@ -92,9 +92,14 @@ public class PathMovement : MonoBehaviour
 
         if (other.gameObject.CompareTag("GiveDough"))
         {
+            //Hamur stackledigim pointi en bastaki pozisyonuna cekiyorum
             doughStackPoint.localPosition = firstDoughStackPoint;
+
+
+
             //HAMURLARI FIRINA VERDIGIMIZ YER 
             GiveDoughMechanic();
+
             //InvokeRepeating("BakingBread", 2f, .05f);
             BakingBread();
         }
