@@ -2,7 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using PathCreation;
-using UnityEngine.UIElements;
+
+using DG.Tweening;
+using UnityEngine.UI;
 
 public class PathMovement : MonoBehaviour
 {
@@ -12,14 +14,24 @@ public class PathMovement : MonoBehaviour
 
     public int currentDough;
     public bool giveDough;
+
+    public bool isPlayerTakeDough = false;
+    
+    public bool giveBread;
+    public Transform doughMachine;
     public Transform doughStackPoint;
     public GameObject breadDough;
     public List<GameObject> breadDoughList;
+    public List<GameObject> bakedBreadList;
 
+    public Image fillImage1;
     public GameObject breadDoughPoint;
+    public GameObject bakedBreadPoint;
 
 
-    public float timer = 1f;
+    public float stackTimer = 0f;
+    public float breadTimer = 2f;
+
     void Update()
     {
         if (Input.GetMouseButton(0))
@@ -27,38 +39,71 @@ public class PathMovement : MonoBehaviour
             distanceTravelled += speed * Time.deltaTime;
             transform.position = pathCreator.path.GetPointAtDistance(distanceTravelled) + new Vector3(0, 4, 0);
         }
-        if (timer > 0)
+        if (stackTimer < 1)
         {
-            timer -= Time.deltaTime;
+            stackTimer += Time.deltaTime;
         }
-        if (timer <= 0)
+        if (stackTimer >= 1)
         {
             giveDough = true;
+            
+        }
+
+
+        if (breadTimer > 0)
+        {
+            breadTimer -= Time.deltaTime;
+        }
+        if (breadTimer <= 0)
+        {
+            giveBread = true;
+        }
+        if (isPlayerTakeDough)
+        {
+            fillImage1.fillAmount = stackTimer;
         }
     }
     private void OnTriggerStay(Collider other)
     {
         if (other.gameObject.CompareTag("DoughStack") && currentDough <= 4 && giveDough)
         {
+            //Debug.Log("Hamur stackle");
             DoughStackMechanic();
         }
         if (other.gameObject.CompareTag("GiveDough"))
         {
-            //Debug.Log("Hmaurlari ver ");
+            //HAMURLARI FIRINA VERDIGIMIZ YER 
             GiveDoughMechanic();
+            //InvokeRepeating("BakingBread", 2f, .05f);
+            BakingBread();
+        }
+    }
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.gameObject.CompareTag("DoughStack"))
+        {
+            isPlayerTakeDough = false;
         }
     }
     void DoughStackMechanic()
     {
         Debug.Log("Hamur stackle");
+        isPlayerTakeDough = true;
         giveDough = false;
-        timer = 1f;
+        stackTimer = 0f;
         currentDough++;
-        doughStackPoint.position += new Vector3(0, .5f, 0);
-        GameObject newBreadDough = Instantiate(breadDough);
-        newBreadDough.transform.transform.parent = transform;
-        newBreadDough.transform.position = doughStackPoint.position;
-        breadDoughList.Add(newBreadDough);
+
+        if (isPlayerTakeDough)
+        {
+            GameObject newBreadDough = Instantiate(breadDough, doughMachine.transform.parent);
+            newBreadDough.transform.parent = doughStackPoint.transform;
+            newBreadDough.transform.DOMove(doughStackPoint.transform.position, .3f);
+            doughStackPoint.position += new Vector3(0, .5f, 0);
+            //newBreadDough.transform.parent = transform;
+            //newBreadDough.transform.position = doughStackPoint.position;
+            breadDoughList.Add(newBreadDough);
+        }
+
     }
     void GiveDoughMechanic()
     {
@@ -69,8 +114,42 @@ public class PathMovement : MonoBehaviour
                 Debug.Log("Hamurlari ver ");
                 breadDoughList[breadDoughList.Count - 1].gameObject.transform.parent = breadDoughPoint.transform;
                 breadDoughList[breadDoughList.Count - 1].gameObject.transform.position = breadDoughPoint.transform.position;
+
+                bakedBreadList.Add(breadDoughList[breadDoughList.Count - 1].gameObject);
                 breadDoughList.Remove(breadDoughList[breadDoughList.Count - 1].gameObject);
             }
         }
+
+    }
+    void BakingBread()
+    {
+        if (breadTimer <= 0)
+        {
+            int currentIndex = bakedBreadList.Count - 1;
+            for (int i = 0; i < bakedBreadList.Count; i++)
+            {
+                giveBread = false;
+                breadTimer = 2f;
+                bakedBreadList[currentIndex].gameObject.transform.DOMove(bakedBreadPoint.transform.position, 1f);
+                currentIndex--;
+
+            }
+
+        }
+        //giveBread = false;
+        //breadTimer = 2f;
+
+
+
+        /*
+        if (breadDoughList.Count > 0)
+        {
+            giveBread = false;
+            breadTimer = 2f;
+            Debug.Log("Ekmek gitmeye hazir");
+            //bakedBreadList[bakedBreadList.Count - 1].gameObject.transform.DOMove(bakedBreadPoint.transform.position, 2f);
+            //bakedBreadPoint.transform.position = bakedBreadPoint.transform.position - new Vector3(0, 0, - 1.5f);
+        }
+        */
     }
 }
