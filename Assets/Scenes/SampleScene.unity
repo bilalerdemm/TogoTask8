@@ -4067,6 +4067,7 @@ MonoBehaviour:
   fillImage1: {fileID: 1179884872}
   breadDoughPoint: {fileID: 8157672}
   bakedBreadPoint: {fileID: 263395348}
+  playerAnim: {fileID: 1597429272}
   stackTimer: 1
   breadTimer: 2
 --- !u!54 &1597429269
@@ -4103,6 +4104,26 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 92d1c12c12f430d449c06cfe51353c9f, type: 3}
   m_PrefabInstance: {fileID: 1021912699}
   m_PrefabAsset: {fileID: 0}
+--- !u!95 &1597429272
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1597429266}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: bffac27e239cbfb4abc28d5bc725e51c, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
 --- !u!1 &1612637144
 GameObject:
   m_ObjectHideFlags: 0

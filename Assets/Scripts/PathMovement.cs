@@ -26,6 +26,8 @@ public class PathMovement : MonoBehaviour
     public GameObject breadDoughPoint;
     public GameObject bakedBreadPoint;
 
+    public Animator playerAnim;
+
 
     public float stackTimer = 0f;
     public float breadTimer = 2f;
@@ -37,11 +39,18 @@ public class PathMovement : MonoBehaviour
 
     void Update()
     {
+
         if (Input.GetMouseButton(0))
         {
+            playerAnim.SetBool("isRunning", true);
             distanceTravelled += speed * Time.deltaTime;
             transform.position = pathCreator.path.GetPointAtDistance(distanceTravelled) + new Vector3(0, 4, 0);
             transform.rotation = pathCreator.path.GetRotationAtDistance(distanceTravelled);
+        }
+        if (Input.GetMouseButtonUp(0))
+        {
+            
+            playerAnim.SetBool("isRunning", false);
         }
         if (stackTimer < 1)
         {
@@ -61,7 +70,7 @@ public class PathMovement : MonoBehaviour
                 fillImage1.fillAmount = 0;
             }
         }
-        #region
+        #region  BreadTimer
         if (breadTimer > 0)
         {
             breadTimer -= Time.deltaTime;
