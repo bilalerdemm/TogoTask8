@@ -8,6 +8,8 @@ using UnityEngine.UI;
 
 public class PathMovement : MonoBehaviour
 {
+    public static PathMovement instance;
+
     public PathCreator pathCreator;
     public float speed = 5f;
     float distanceTravelled;
@@ -16,32 +18,37 @@ public class PathMovement : MonoBehaviour
     public bool isPlayerTakeDough = false;
     public bool giveBread;
     public bool isFrontBake = false;
+
     public Transform doughMachine;
     public Transform doughStackPoint;
+    public Transform movingBreadPoint;
     public Vector3 firstDoughStackPoint;
-    public GameObject breadDough;
+    
     public List<GameObject> breadDoughList;
     public List<GameObject> bakedBreadList;
-
-    public Image fillImage1, fillImage2;
+    public List<GameObject> movingBreadList;
+    
+    public GameObject breadDough;
     public GameObject breadDoughPoint;
     public GameObject bakedBreadPoint;
+
+    public float stackTimer = 0f;
+    public float breadTimer = 0f;
 
     public Animator playerAnim;
 
     public Material breadMat;
 
-    public float stackTimer = 0f;
-    public float breadTimer = 0f;
+    public Image fillImage1, fillImage2;
 
     private void Awake()
     {
         firstDoughStackPoint = doughStackPoint.localPosition;
+        instance = this;
     }
 
     void Update()
     {
-
         if (Input.GetMouseButton(0))
         {
             playerAnim.SetBool("isRunning", true);
@@ -82,6 +89,31 @@ public class PathMovement : MonoBehaviour
             }
         }
         #endregion
+    }
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.CompareTag("TakeBread"))
+        {
+            Debug.Log("Ekmekleri al usta");
+            //for (int i = 0; i < bakedBreadList.Count; i++)
+            //{
+            //    bakedBreadList[i].gameObject.transform.parent = movingBreadPoint.transform;
+            //    bakedBreadList[i].gameObject.transform.localPosition = Vector3.zero;
+            //    //bakedBreadList[i].gameObject.transform.DOMove(movingBreadPoint.transform.position, .1f);
+            //    movingBreadList.Add(bakedBreadList[i].gameObject);
+            //}
+
+            foreach (var item in bakedBreadList)
+            {
+                movingBreadList.Add(item.gameObject);
+                item.transform.SetParent(transform.root);
+            }
+            bakedBreadList.Clear();
+            foreach (var item in movingBreadList)
+            {
+                item.transform.DOLocalMove(movingBreadPoint.transform.localPosition, .25f);
+            }
+        }
     }
     private void OnTriggerStay(Collider other)
     {
@@ -141,7 +173,6 @@ public class PathMovement : MonoBehaviour
             }
         }
     }
-    #region
     void GiveDoughMechanic()
     {
         if (fillImage2.fillAmount >= 1)
@@ -166,11 +197,10 @@ public class PathMovement : MonoBehaviour
     {
         for (int i = 0; i < bakedBreadList.Count; i++)
         {
-            bakedBreadList[i].gameObject.transform.DOMove(bakedBreadPoint.transform.position, 1f);
+            bakedBreadList[i].gameObject.transform.DOMove(bakedBreadPoint.transform.position, .1f);
             var renderer = bakedBreadList[i].gameObject.GetComponent<SkinnedMeshRenderer>();
             renderer.material = breadMat;
-            yield return new WaitForSeconds(2);
+            yield return new WaitForSeconds(.1f);
         }
     }
-    #endregion
 }
