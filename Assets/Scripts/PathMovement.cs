@@ -16,7 +16,7 @@ public class PathMovement : MonoBehaviour
     public bool isPlayerTakeDough = false;
     public bool giveBread;
     public Transform doughMachine;
-    public Transform  doughStackPoint;
+    public Transform doughStackPoint;
     public Vector3 firstDoughStackPoint;
     public GameObject breadDough;
     public List<GameObject> breadDoughList;
@@ -49,7 +49,7 @@ public class PathMovement : MonoBehaviour
         }
         if (Input.GetMouseButtonUp(0))
         {
-            
+
             playerAnim.SetBool("isRunning", false);
         }
         if (stackTimer < 1)
@@ -101,7 +101,7 @@ public class PathMovement : MonoBehaviour
             GiveDoughMechanic();
 
             //InvokeRepeating("BakingBread", 2f, .05f);
-            BakingBread();
+            StartCoroutine(BakingBread());
         }
 
     }
@@ -145,16 +145,19 @@ public class PathMovement : MonoBehaviour
             for (int i = 0; i < breadDoughList.Count; i++)
             {
                 Debug.Log("Hamurlari ver ");
-                breadDoughList[breadDoughList.Count - 1].gameObject.transform.parent = breadDoughPoint.transform;
-                breadDoughList[breadDoughList.Count - 1].gameObject.transform.position = breadDoughPoint.transform.position;
+                breadDoughList[i].gameObject.transform.parent = breadDoughPoint.transform;
 
-                bakedBreadList.Add(breadDoughList[breadDoughList.Count - 1].gameObject);
-                breadDoughList.Remove(breadDoughList[breadDoughList.Count - 1].gameObject);
+                breadDoughList[i].gameObject.transform.position = breadDoughPoint.transform.position;
+
+                bakedBreadList.Add(breadDoughList[i].gameObject);
+                //breadDoughList.Remove(breadDoughList[i].gameObject);
+
             }
+            breadDoughList.Clear();
         }
 
     }
-    void BakingBread()
+    IEnumerator BakingBread()
     {
         if (breadTimer <= 0)
         {
@@ -165,10 +168,11 @@ public class PathMovement : MonoBehaviour
                 breadTimer = 2f;
                 bakedBreadList[currentIndex].gameObject.transform.DOMove(bakedBreadPoint.transform.position, 1f);
                 currentIndex--;
-
+                yield return new WaitForSeconds(2);
             }
-
         }
+
+
         //giveBread = false;
         //breadTimer = 2f;
 
