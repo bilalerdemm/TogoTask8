@@ -15,6 +15,7 @@ public class PathMovement : MonoBehaviour
     public bool giveDough;
     public bool isPlayerTakeDough = false;
     public bool giveBread;
+    public bool isFrontBake = false;
     public Transform doughMachine;
     public Transform doughStackPoint;
     public Vector3 firstDoughStackPoint;
@@ -22,7 +23,7 @@ public class PathMovement : MonoBehaviour
     public List<GameObject> breadDoughList;
     public List<GameObject> bakedBreadList;
 
-    public Image fillImage1;
+    public Image fillImage1, fillImage2;
     public GameObject breadDoughPoint;
     public GameObject bakedBreadPoint;
 
@@ -31,7 +32,7 @@ public class PathMovement : MonoBehaviour
     public Material breadMat;
 
     public float stackTimer = 0f;
-    public float breadTimer = 2f;
+    public float breadTimer = 0f;
 
     private void Awake()
     {
@@ -71,14 +72,14 @@ public class PathMovement : MonoBehaviour
                 fillImage1.fillAmount = 0;
             }
         }
-        #region  BreadTimer
-        if (breadTimer > 0)
+
+        if (isFrontBake)
         {
-            breadTimer -= Time.deltaTime;
-        }
-        if (breadTimer <= 0)
-        {
-            giveBread = true;
+            #region  BreadTimer
+            if (breadTimer < 1)
+            {
+                breadTimer += Time.deltaTime;
+            }
         }
         #endregion
     }
@@ -93,15 +94,15 @@ public class PathMovement : MonoBehaviour
 
         if (other.gameObject.CompareTag("GiveDough"))
         {
+            isFrontBake = true;
             //Hamur stackledigim pointi en bastaki pozisyonuna cekiyorum
             doughStackPoint.localPosition = firstDoughStackPoint;
 
-
+            fillImage2.fillAmount = breadTimer;
 
             //HAMURLARI FIRINA VERDIGIMIZ YER 
             GiveDoughMechanic();
 
-            //InvokeRepeating("BakingBread", 2f, .05f);
             StartCoroutine(BakingBread());
         }
 
@@ -111,9 +112,13 @@ public class PathMovement : MonoBehaviour
         if (other.gameObject.CompareTag("DoughStack"))
         {
             isPlayerTakeDough = false;
-            breadTimer = 0;
             fillImage1.fillAmount = 0;
             giveDough = true;
+        }
+        if (other.gameObject.CompareTag("GiveDough"))
+        {
+            isFrontBake = false;
+            fillImage2.fillAmount = 0;
         }
     }
     void DoughStackMechanic()
@@ -129,11 +134,9 @@ public class PathMovement : MonoBehaviour
             {
                 Debug.Log("If icine girildi.");
                 GameObject newBreadDough = Instantiate(breadDough, doughMachine.transform.parent);
-                //newBreadDough.transform.parent = doughStackPoint.transform;
                 newBreadDough.transform.DOMove(doughStackPoint.transform.position, .03f);
                 doughStackPoint.position += new Vector3(0, .5f, 0);
                 newBreadDough.transform.parent = transform;
-                //newBreadDough.transform.position = doughStackPoint.position;
                 breadDoughList.Add(newBreadDough);
             }
         }
@@ -141,55 +144,33 @@ public class PathMovement : MonoBehaviour
     #region
     void GiveDoughMechanic()
     {
-        if (breadDoughList.Count > 0)
+        if (fillImage2.fillAmount >= 1)
         {
-            for (int i = 0; i < breadDoughList.Count; i++)
+            if (breadDoughList.Count > 0)
             {
-                Debug.Log("Hamurlari ver ");
-                breadDoughList[i].gameObject.transform.parent = breadDoughPoint.transform;
+                for (int i = 0; i < breadDoughList.Count; i++)
+                {
+                    Debug.Log("Hamurlari ver ");
+                    breadDoughList[i].gameObject.transform.parent = breadDoughPoint.transform;
 
-                breadDoughList[i].gameObject.transform.position = breadDoughPoint.transform.position;
+                    breadDoughList[i].gameObject.transform.position = breadDoughPoint.transform.position;
 
-                bakedBreadList.Add(breadDoughList[i].gameObject);
-                //breadDoughList.Remove(breadDoughList[i].gameObject);
-
+                    bakedBreadList.Add(breadDoughList[i].gameObject);
+                }
+                breadDoughList.Clear();
             }
-            breadDoughList.Clear();
         }
 
     }
     IEnumerator BakingBread()
     {
-        if (breadTimer <= 0)
+        for (int i = 0; i < bakedBreadList.Count; i++)
         {
-            
-            for (int i = 0; i < bakedBreadList.Count; i++)
-            {
-                giveBread = false;
-                breadTimer = 2f;
-                bakedBreadList[i].gameObject.transform.DOMove(bakedBreadPoint.transform.position, 1f);
-                var renderer = bakedBreadList[i].gameObject.GetComponent<SkinnedMeshRenderer>();
-                renderer.material = breadMat;
-                yield return new WaitForSeconds(2);
-            }
+            bakedBreadList[i].gameObject.transform.DOMove(bakedBreadPoint.transform.position, 1f);
+            var renderer = bakedBreadList[i].gameObject.GetComponent<SkinnedMeshRenderer>();
+            renderer.material = breadMat;
+            yield return new WaitForSeconds(2);
         }
-
-
-        //giveBread = false;
-        //breadTimer = 2f;
-
-
-
-        /*
-        if (breadDoughList.Count > 0)
-        {
-            giveBread = false;
-            breadTimer = 2f;
-            Debug.Log("Ekmek gitmeye hazir");
-            //bakedBreadList[bakedBreadList.Count - 1].gameObject.transform.DOMove(bakedBreadPoint.transform.position, 2f);
-            //bakedBreadPoint.transform.position = bakedBreadPoint.transform.position - new Vector3(0, 0, - 1.5f);
-        }
-        */
     }
     #endregion
 }
