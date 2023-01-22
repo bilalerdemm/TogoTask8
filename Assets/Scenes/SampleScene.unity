@@ -4061,13 +4061,14 @@ MonoBehaviour:
   doughMachine: {fileID: 696428868}
   doughStackPoint: {fileID: 410271402}
   firstDoughStackPoint: {x: 0, y: 0, z: 0}
-  breadDough: {fileID: 919132149155446097, guid: 2b848d11a621a3b4d8c0bea1b8f96bb2, type: 3}
+  breadDough: {fileID: 2678286536277886776, guid: e1bd0b9387cb57948b66a9cc8bdd48aa, type: 3}
   breadDoughList: []
   bakedBreadList: []
   fillImage1: {fileID: 1179884872}
   breadDoughPoint: {fileID: 8157672}
   bakedBreadPoint: {fileID: 263395348}
   playerAnim: {fileID: 1597429272}
+  breadMat: {fileID: 2100000, guid: 83145a80fef41ff4c81f4ec2bec40134, type: 2}
   stackTimer: 1
   breadTimer: 2
 --- !u!54 &1597429269

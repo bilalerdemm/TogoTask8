@@ -28,6 +28,7 @@ public class PathMovement : MonoBehaviour
 
     public Animator playerAnim;
 
+    public Material breadMat;
 
     public float stackTimer = 0f;
     public float breadTimer = 2f;
@@ -161,13 +162,14 @@ public class PathMovement : MonoBehaviour
     {
         if (breadTimer <= 0)
         {
-            int currentIndex = bakedBreadList.Count - 1;
+            
             for (int i = 0; i < bakedBreadList.Count; i++)
             {
                 giveBread = false;
                 breadTimer = 2f;
-                bakedBreadList[currentIndex].gameObject.transform.DOMove(bakedBreadPoint.transform.position, 1f);
-                currentIndex--;
+                bakedBreadList[i].gameObject.transform.DOMove(bakedBreadPoint.transform.position, 1f);
+                var renderer = bakedBreadList[i].gameObject.GetComponent<SkinnedMeshRenderer>();
+                renderer.material = breadMat;
                 yield return new WaitForSeconds(2);
             }
         }
