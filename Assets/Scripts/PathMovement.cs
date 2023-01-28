@@ -141,6 +141,10 @@ public class PathMovement : MonoBehaviour
             isFrontBake = false;
             fillImage2.fillAmount = 0;
         }
+        if (other.gameObject.CompareTag("TakeBread"))
+        {
+            bakedBreadPoint.transform.localPosition = new Vector3(6, 6, 3);
+        }
     }
     void DoughStackMechanic()
     {
