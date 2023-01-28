@@ -52,7 +52,10 @@ public class PathMovement : MonoBehaviour
         firstDoughStackPoint = doughStackPoint.localPosition;
         instance = this;
     }
-
+    private void Start()
+    {
+        InvokeRepeating("BakeBread", 0, 2f);
+    }
     void Update()
     {
         bakedBreadCount = bakedBreadList.Count;
@@ -177,7 +180,7 @@ public class PathMovement : MonoBehaviour
                 for (int i = 0; i < breadDoughList.Count; i++)
                 {
                     bakedBreadList.Add(breadDoughList[i].gameObject);
-                    StartCoroutine(BakingBread());
+                    //StartCoroutine(BakingBread());
                     breadDoughList[i].gameObject.transform.parent = breadDoughPoint.transform;
                     breadDoughList[i].gameObject.transform.position = breadDoughPoint.transform.position;
                     breadDoughList.RemoveAt(i);
@@ -196,18 +199,25 @@ public class PathMovement : MonoBehaviour
             yield return new WaitForSeconds(2f);
         }
     }
-    public void TakeBreadMechanic()
+    void TakeBreadMechanic()
     {
-        int bakedBreadListCount = bakedBreadList.Count;
-        for (int i = 0; i < bakedBreadListCount; i++)
+        for (int i = 0; i < movingBreadList.Count; i++)
         {
-            movingBreadList.Add(bakedBreadList[0].gameObject);
-            bakedBreadList[0].gameObject.transform.parent = movingBreadPoint.transform;
-            bakedBreadList[0].gameObject.transform.DOMove(movingBreadPoint.transform.position + new Vector3(0, i, 0), /*y ekle i kullanarak */ .1f);
-            bakedBreadList.RemoveAt(0);
+            movingBreadList[i].gameObject.transform.parent = movingBreadPoint.transform;
+            movingBreadList[i].gameObject.transform.DOMove(movingBreadPoint.transform.position + new Vector3(0, i, 0), /*y ekle i kullanarak */ .1f);
         }
+
+        //int bakedBreadListCount = bakedBreadList.Count;
+        //for (int i = 0; i < bakedBreadListCount; i++)
+        //{
+        //    movingBreadList.Add(bakedBreadList[0].gameObject);
+        //    bakedBreadList[0].gameObject.transform.parent = movingBreadPoint.transform;
+        //    bakedBreadList[0].gameObject.transform.DOMove(movingBreadPoint.transform.position + new Vector3(0, i, 0), /*y ekle i kullanarak */ .1f);
+        //    bakedBreadList.RemoveAt(0);
+        //}
+
     }
-    public void SellBreadMechanic()
+    void SellBreadMechanic()
     {
         Debug.Log("Sell  Girildi");
         int movingBreadCount = movingBreadList.Count;
@@ -220,6 +230,18 @@ public class PathMovement : MonoBehaviour
                 movingBreadList[0].gameObject.transform.parent = sellStand.transform;
                 movingBreadList.RemoveAt(0);
             }
+        }
+    }
+    void BakeBread()
+    {
+        if (bakedBreadList.Count > 0)
+        {
+            bakedBreadList[0].gameObject.transform.DOMove(bakedBreadPoint.transform.position, 1f);
+            var renderer = bakedBreadList[0].gameObject.GetComponent<SkinnedMeshRenderer>();
+            renderer.material = breadMat;
+            movingBreadList.Add(bakedBreadList[0].gameObject);
+            bakedBreadPoint.transform.localPosition += new Vector3(0, .5f, 0);
+            bakedBreadList.RemoveAt(0);
         }
     }
 }
