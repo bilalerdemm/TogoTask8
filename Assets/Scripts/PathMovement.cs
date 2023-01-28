@@ -29,10 +29,12 @@ public class PathMovement : MonoBehaviour
     public List<GameObject> breadDoughList;
     public List<GameObject> bakedBreadList;
     public List<GameObject> movingBreadList;
+    public List<GameObject> sellBreadList;
 
     public GameObject breadDough;
     public GameObject breadDoughPoint;
     public GameObject bakedBreadPoint;
+    public GameObject sellStand;
 
     public float stackTimer = 0f;
     public float breadTimer = 0f;
@@ -103,6 +105,10 @@ public class PathMovement : MonoBehaviour
         {
             TakeBreadMechanic();
         }
+        if (other.gameObject.CompareTag("Sell"))
+        {
+            SellBreadMechanic();
+        }
 
     }
     private void OnTriggerStay(Collider other)
@@ -111,7 +117,6 @@ public class PathMovement : MonoBehaviour
         {
             //HAMUR STACKLEDIGIMIZ YER.
             DoughStackMechanic();
-
         }
 
         if (other.gameObject.CompareTag("GiveDough"))
@@ -124,7 +129,7 @@ public class PathMovement : MonoBehaviour
             //HAMURLARI FIRINA VERDIGIMIZ YER 
             GiveDoughMechanic();
             //HAMURLARIN PISIP EKMEK OLDUGU YER
-            
+
         }
 
     }
@@ -171,8 +176,6 @@ public class PathMovement : MonoBehaviour
             {
                 for (int i = 0; i < breadDoughList.Count; i++)
                 {
-                    Debug.Log("Hamurlari ver ");
-
                     bakedBreadList.Add(breadDoughList[i].gameObject);
                     StartCoroutine(BakingBread());
                     breadDoughList[i].gameObject.transform.parent = breadDoughPoint.transform;
@@ -184,7 +187,6 @@ public class PathMovement : MonoBehaviour
     }
     IEnumerator BakingBread()
     {
-       
         for (int i = 0; i < bakedBreadList.Count; i++)
         {
             bakedBreadList[i].gameObject.transform.DOMove(bakedBreadPoint.transform.position, .3f);
@@ -195,41 +197,29 @@ public class PathMovement : MonoBehaviour
         }
     }
     public void TakeBreadMechanic()
-    { 
+    {
         int bakedBreadListCount = bakedBreadList.Count;
-        Debug.Log("Ekmekleri al usta");
         for (int i = 0; i < bakedBreadListCount; i++)
         {
-            Debug.Log("Ekmekleri al for");
-
             movingBreadList.Add(bakedBreadList[0].gameObject);
             bakedBreadList[0].gameObject.transform.parent = movingBreadPoint.transform;
-            //bakedBreadList[i].gameObject.transform.localPosition = Vector3.zero;
-            bakedBreadList[0].gameObject.transform.DOMove(movingBreadPoint.transform.position + new Vector3(0,i,0), /*y ekle i kullanarak */ .1f);
+            bakedBreadList[0].gameObject.transform.DOMove(movingBreadPoint.transform.position + new Vector3(0, i, 0), /*y ekle i kullanarak */ .1f);
             bakedBreadList.RemoveAt(0);
-
-            //foreach (var item in bakedBreadList)
-            //{
-            //    movingBreadList.Add(item.gameObject);
-            //    item.transform.SetParent(movingBreadPoint);
-            //}
-            //bakedBreadList.Clear();
-            //foreach (var item in movingBreadList)
-            //{
-            //    item.transform.DOLocalMove(movingBreadPoint.transform.localPosition, .05f);
-            //}
         }
     }
     public void SellBreadMechanic()
     {
-        /*if (other.gameObject.CompareTag("SellBread"))
-{
-    Debug.Log("Sell Bread Girildi");
-    for (int i = 0; i < movingBreadList.Count; i++)
-    {
-        Instantiate(breadDough, sellBreadPoint);
-    }  
-}
-*/
+        Debug.Log("Sell  Girildi");
+        int movingBreadCount = movingBreadList.Count;
+        for (int i = 0; i <= movingBreadCount; i++)
+        {
+            int sellBreadCount = sellBreadList.Count;
+            for (int k = 0; k <= sellBreadCount; k++)
+            {
+                movingBreadList[0].gameObject.transform.DOMove(sellBreadList[k].transform.position, .3f);
+                movingBreadList[0].gameObject.transform.parent = sellStand.transform;
+                movingBreadList.RemoveAt(0);
+            }
+        }
     }
 }
