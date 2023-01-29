@@ -31,6 +31,7 @@ public class PathMovement : MonoBehaviour
     public List<GameObject> bakedStandList;
     public List<GameObject> movingBreadList;
     public List<GameObject> sellBreadList;
+    public List<GameObject> finalBreadList;
 
     public GameObject breadDough;
     public GameObject breadDoughPoint;
@@ -200,33 +201,6 @@ public class PathMovement : MonoBehaviour
             yield return new WaitForSeconds(2f);
         }
     }
-    void TakeBreadMechanic()
-    {
-        int breadCount = bakedStandList.Count;
-        for (int i = 0; i < breadCount; i++)
-        {
-            bakedStandList[0].gameObject.transform.parent = movingBreadPoint.transform;
-            bakedStandList[0].gameObject.transform.DOMove(movingBreadPoint.transform.position + new Vector3(0, i, 0), /*y ekle i kullanarak */ .1f);
-            movingBreadList.Add(bakedStandList[0]);
-            bakedStandList.RemoveAt(0);
-        }
-
-       
-
-    }
-    void SellBreadMechanic()
-    {
-        Debug.Log("Sell  Girildi");
-        int movingBreadCount = movingBreadList.Count;
-        for (int i = 0; i < movingBreadCount; i++)
-        {
-         
-                movingBreadList[0].gameObject.transform.DOMove(sellBreadList[i].transform.position, .3f);
-                movingBreadList[0].gameObject.transform.parent = sellStand.transform;
-                movingBreadList.RemoveAt(0);
-            
-        }
-    }
     void BakeBread()
     {
         if (bakedBreadList.Count > 0)
@@ -239,4 +213,28 @@ public class PathMovement : MonoBehaviour
             bakedBreadList.RemoveAt(0);
         }
     }
+    void TakeBreadMechanic()
+    {
+        int breadCount = bakedStandList.Count;
+        for (int i = 0; i < breadCount; i++)
+        {
+            bakedStandList[0].gameObject.transform.parent = movingBreadPoint.transform;
+            bakedStandList[0].gameObject.transform.DOMove(movingBreadPoint.transform.position + new Vector3(0, i, 0), /*y ekle i kullanarak */ .1f);
+            movingBreadList.Add(bakedStandList[0]);
+            bakedStandList.RemoveAt(0);
+        }
+    }
+    void SellBreadMechanic()
+    {
+        Debug.Log("Sell  Girildi");
+        int movingBreadCount = movingBreadList.Count;
+        for (int i = 0; i < movingBreadCount; i++)
+        {
+            movingBreadList[0].gameObject.transform.DOMove(sellBreadList[i].transform.position, .3f);
+            movingBreadList[0].gameObject.transform.parent = sellStand.transform;
+            finalBreadList.Add(movingBreadList[0]);
+            movingBreadList.RemoveAt(0);
+        }
+    }
+
 }
