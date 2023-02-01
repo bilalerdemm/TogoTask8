@@ -226,15 +226,20 @@ public class PathMovement : MonoBehaviour
     }
     void SellBreadMechanic()
     {
-        Debug.Log("Sell  Girildi");
-        int movingBreadCount = movingBreadList.Count;
-        for (int i = 0; i < movingBreadCount; i++)
+        if (movingBreadList.Count > 0)
         {
-            movingBreadList[0].gameObject.transform.DOMove(sellBreadList[i].transform.position, .3f);
-            movingBreadList[0].gameObject.transform.parent = sellStand.transform;
-            finalBreadList.Add(movingBreadList[0]);
-            movingBreadList.RemoveAt(0);
+            Debug.Log("Sell  Girildi");
+            int movingBreadCount = movingBreadList.Count;
+            for (int i = 0; i < movingBreadCount; i++)
+            {
+                movingBreadList[0].gameObject.transform.DOMove(sellBreadList[i].transform.position, .3f);
+                movingBreadList[0].gameObject.transform.parent = sellStand.transform;
+                finalBreadList.Add(movingBreadList[0]);
+                movingBreadList.RemoveAt(0);
+            }
+            GameManager.instance.customers[0].GetComponent<Customers>().CustomerBuy();
         }
+
     }
 
 }

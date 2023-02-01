@@ -9,6 +9,9 @@ TagManager:
   - TakeBread
   - Sell
   - SellBread
+  - SellArea
+  - CustomerChecker
+  - Customer
   layers:
   - Default
   - TransparentFX
