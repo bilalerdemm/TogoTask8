@@ -237,7 +237,7 @@ public class PathMovement : MonoBehaviour
                 finalBreadList.Add(movingBreadList[0]);
                 movingBreadList.RemoveAt(0);
             }
-            GameManager.instance.customers[0].GetComponent<Customers>().CustomerBuy();
+            //GameManager.instance.customers[0].GetComponent<Customers>().CustomerBuy();
         }
 
     }
