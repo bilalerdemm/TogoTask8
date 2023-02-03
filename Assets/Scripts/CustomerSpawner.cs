@@ -36,8 +36,8 @@ public class CustomerSpawner : MonoBehaviour
     {
         yield return new WaitForSeconds(1);
         Destroy(other.gameObject);
-        GameObject newCustomer = Instantiate(customerPre, transform.parent);
-        newCustomer.transform.DOMove(GameManager.instance.customerPoint.transform.position + new Vector3(-20, 0, -4), 1f);
-        GameManager.instance.customers.Add(newCustomer);
+        GameObject newCustomer = Instantiate(customerPre);
+        newCustomer.transform.DOMove(GameManager.instance.customerPoint.transform.localPosition + new Vector3(-20, 8, -4), 1f);
+        //GameManager.instance.customers.Add(newCustomer);
     }
 }

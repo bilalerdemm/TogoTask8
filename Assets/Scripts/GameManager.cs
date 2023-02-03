@@ -12,6 +12,9 @@ public class GameManager : MonoBehaviour
 
     public Transform customerPoint,afterBuyPoint,againBuyPoint;
 
+    public int soldedBreadCount = 0;
+
+
     private void Awake() => instance = this;
 
 

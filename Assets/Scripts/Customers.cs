@@ -10,27 +10,31 @@ public class Customers : MonoBehaviour
     public PathCreator pathCreator;
     public float speed = 5f;
     float distanceTravelled;
-
     public Animator customerAnim;
-
-
 
     private void Update()
     {
         // Debug.Log("ekmek: " + PathMovement.instance.finalBreadList.Count);
-
         if (PathMovement.instance.finalBreadList.Count > 0 || transform.childCount > 2)
         {
             customerAnim.SetBool("isRunning", true);
             distanceTravelled += speed * Time.deltaTime;
-            transform.position = pathCreator.path.GetPointAtDistance(distanceTravelled);
-            //if (CustomerSpawner.instance.inCustomerSpawner)
-            //{
-            //    Destroy(GameManager.instance.customers[0].gameObject.transform.GetChild(2).gameObject);
-            //}
+            transform.position = pathCreator.path.GetPointAtDistance(distanceTravelled) + new Vector3 (0,2,0);
+
         }
     }
+    private void OnTriggerEnter(Collider other)
+    {
+        Debug.Log("Musteri geldi");
 
+        if (other.gameObject.CompareTag("SellArea") && PathMovement.instance.finalBreadList.Count > 0)
+        {
+            PathMovement.instance.finalBreadList[PathMovement.instance.finalBreadList.Count - 1].gameObject.transform.DOLocalMove(new Vector3(0, 5, 1), .5f);
+            PathMovement.instance.finalBreadList[PathMovement.instance.finalBreadList.Count - 1].gameObject.transform.parent = transform;
+            PathMovement.instance.finalBreadList.RemoveAt(PathMovement.instance.finalBreadList.Count - 1);
+            GameManager.instance.soldedBreadCount++;
+        }
+    }
     public void CustomerBuy()
     {
         //StartCoroutine(CustomersMoveToBuy());
@@ -60,15 +64,5 @@ public class Customers : MonoBehaviour
         }
     }
     */
-    private void OnTriggerEnter(Collider other)
-    {
-        Debug.Log("Musteri geldi");
 
-        if (other.gameObject.CompareTag("SellArea") && PathMovement.instance.finalBreadList.Count > 0)
-        {
-            PathMovement.instance.finalBreadList[PathMovement.instance.finalBreadList.Count - 1].gameObject.transform.DOLocalMove(new Vector3(0, 5, 1), .5f);
-            PathMovement.instance.finalBreadList[PathMovement.instance.finalBreadList.Count - 1].gameObject.transform.parent = transform;
-            PathMovement.instance.finalBreadList.RemoveAt(PathMovement.instance.finalBreadList.Count - 1);
-        }
-    }
 }
