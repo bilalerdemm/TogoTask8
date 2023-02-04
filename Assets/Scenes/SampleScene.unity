@@ -7669,6 +7669,7 @@ MonoBehaviour:
   againBuyPoint: {fileID: 1861135191}
   money: 0
   moneyText: {fileID: 1262902790}
+  moneyObject: {fileID: 1962572607}
 --- !u!4 &1736751171
 Transform:
   m_ObjectHideFlags: 0
