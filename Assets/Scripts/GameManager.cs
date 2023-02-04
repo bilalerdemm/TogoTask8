@@ -3,6 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using TMPro;
+
 
 public class GameManager : MonoBehaviour
 {
@@ -12,7 +14,8 @@ public class GameManager : MonoBehaviour
 
     public Transform customerPoint,afterBuyPoint,againBuyPoint;
 
-    public int soldedBreadCount = 0;
+    public int money = 0;
+    public TextMeshProUGUI moneyText;
 
 
     private void Awake() => instance = this;

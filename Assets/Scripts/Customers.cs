@@ -10,6 +10,7 @@ public class Customers : MonoBehaviour
     public PathCreator pathCreator;
     public float speed = 5f;
     float distanceTravelled;
+    
     public Animator customerAnim;
 
     private void Update()
@@ -32,8 +33,8 @@ public class Customers : MonoBehaviour
             PathMovement.instance.finalBreadList[PathMovement.instance.finalBreadList.Count - 1].gameObject.transform.DOLocalMove(new Vector3(0, 5, 1), .5f);
             PathMovement.instance.finalBreadList[PathMovement.instance.finalBreadList.Count - 1].gameObject.transform.parent = transform;
             PathMovement.instance.finalBreadList.RemoveAt(PathMovement.instance.finalBreadList.Count - 1);
-            GameManager.instance.soldedBreadCount++;
-
+            GameManager.instance.money += 5;
+            GameManager.instance.moneyText.text = GameManager.instance.money.ToString();
             transform.DOLocalRotate(new Vector3(transform.rotation.x,180,transform.rotation.z),1f);
         }
     }

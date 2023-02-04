@@ -453,6 +453,7 @@ MonoBehaviour:
   pathCreator: {fileID: 1242429961115611873, guid: 12da98626bf57004aa756222c5789a31, type: 3}
   speed: 15
   customerAnim: {fileID: 3453662214950257459}
+  moneyText: {fileID: 925878724172424367, guid: 5eaae53cc4f574e479a234b5b45c238b, type: 3}
 --- !u!1 &2555808493533677133
 GameObject:
   m_ObjectHideFlags: 0
