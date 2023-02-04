@@ -366,7 +366,7 @@ GameObject:
   - component: {fileID: 3453662214950257459}
   - component: {fileID: 3453662214950257458}
   m_Layer: 0
-  m_Name: NewCustomer2
+  m_Name: CloneCustomer
   m_TagString: Customer
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -451,7 +451,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pathCreator: {fileID: 1242429961115611873, guid: 12da98626bf57004aa756222c5789a31, type: 3}
-  speed: 5
+  speed: 15
   customerAnim: {fileID: 3453662214950257459}
 --- !u!1 &2555808493533677133
 GameObject:

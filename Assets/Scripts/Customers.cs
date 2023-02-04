@@ -33,6 +33,8 @@ public class Customers : MonoBehaviour
             PathMovement.instance.finalBreadList[PathMovement.instance.finalBreadList.Count - 1].gameObject.transform.parent = transform;
             PathMovement.instance.finalBreadList.RemoveAt(PathMovement.instance.finalBreadList.Count - 1);
             GameManager.instance.soldedBreadCount++;
+
+            transform.DOLocalRotate(new Vector3(transform.rotation.x,180,transform.rotation.z),1f);
         }
     }
     public void CustomerBuy()
