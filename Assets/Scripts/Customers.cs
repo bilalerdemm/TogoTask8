@@ -35,9 +35,9 @@ public class Customers : MonoBehaviour
             PathMovement.instance.finalBreadList.RemoveAt(PathMovement.instance.finalBreadList.Count - 1);
             GameManager.instance.money += 5;
             GameManager.instance.moneyText.text = GameManager.instance.money.ToString();
-            GameManager.instance.moneyObject.transform.DOScale(new Vector3(1.35f, 1.35f, 1.35f), .5f).OnComplete(() =>
+            GameManager.instance.moneyObject.transform.DOScale(new Vector3(1.35f, 1.35f, 1.35f), .35f).OnComplete(() =>
             {
-                GameManager.instance.moneyObject.transform.DOScale(new Vector3(1f, 1f, 1f), .5f);
+                GameManager.instance.moneyObject.transform.DOScale(new Vector3(1f, 1f, 1f), .35f);
             });
             transform.DOLocalRotate(new Vector3(transform.rotation.x,180,transform.rotation.z),1f);
         }
