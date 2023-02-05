@@ -218,12 +218,6 @@ public class PathMovement : MonoBehaviour
             bakedBreadList.RemoveAt(0);
         }
     }
-
-
-
-
-
-
     IEnumerator TakeBreadMechanic()
     {
         if (breadDoughList.Count <= 0)
