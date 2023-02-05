@@ -158,20 +158,24 @@ public class PathMovement : MonoBehaviour
     }
     void DoughStackMechanic()
     {
-        isPlayerTakeDough = true;
-        giveDough = false;
-        stackTimer = 0f;
-        if (fillImage1.fillAmount >= 1f)
+        if (movingBreadList.Count <= 0)
         {
-            if (isPlayerTakeDough)
+            isPlayerTakeDough = true;
+            giveDough = false;
+            stackTimer = 0f;
+            if (fillImage1.fillAmount >= 1f)
             {
-                GameObject newBreadDough = Instantiate(breadDough, doughMachine.transform.parent);
-                newBreadDough.transform.DOMove(doughStackPoint.transform.position, .03f);
-                doughStackPoint.position += new Vector3(0, .5f, 0);
-                newBreadDough.transform.parent = transform;
-                breadDoughList.Add(newBreadDough);
+                if (isPlayerTakeDough)
+                {
+                    GameObject newBreadDough = Instantiate(breadDough, doughMachine.transform.parent);
+                    newBreadDough.transform.DOMove(doughStackPoint.transform.position, .03f);
+                    doughStackPoint.position += new Vector3(0, .5f, 0);
+                    newBreadDough.transform.parent = transform;
+                    breadDoughList.Add(newBreadDough);
+                }
             }
         }
+
     }
     void GiveDoughMechanic()
     {
@@ -201,7 +205,7 @@ public class PathMovement : MonoBehaviour
     //        yield return new WaitForSeconds(2f);
     //    }
     //}
-    
+
     void BakeBread()
     {
         if (bakedBreadList.Count > 0)
@@ -222,23 +226,25 @@ public class PathMovement : MonoBehaviour
 
     IEnumerator TakeBreadMechanic()
     {
-        int breadCount = bakedStandList.Count;
-        for (int i = 0; i < breadCount; i++)
+        if (breadDoughList.Count <= 0)
         {
-            bakedStandList[0].gameObject.transform.parent = movingBreadPoint.transform;
-            //bakedStandList[0].gameObject.transform.DOMove(movingBreadPoint.transform.position + new Vector3(0, i, 0), /*y ekle i kullanarak */ .1f);
-            //bakedStandList[0].gameObject.transform.DOLocalMove(new Vector3(0, i, 0), /*y ekle i kullanarak */ .1f);
-            bakedStandList[0].gameObject.transform.DOLocalJump(new Vector3(0, i, 0),1,1 /*y ekle i kullanarak */ ,.1f);
-            movingBreadList.Add(bakedStandList[0]);
-            bakedStandList.RemoveAt(0);
+            int breadCount = bakedStandList.Count;
+            for (int i = 0; i < breadCount; i++)
+            {
+                bakedStandList[0].gameObject.transform.parent = movingBreadPoint.transform;
+                //bakedStandList[0].gameObject.transform.DOMove(movingBreadPoint.transform.position + new Vector3(0, i, 0), /*y ekle i kullanarak */ .1f);
+                //bakedStandList[0].gameObject.transform.DOLocalMove(new Vector3(0, i, 0), /*y ekle i kullanarak */ .1f);
+                bakedStandList[0].gameObject.transform.DOLocalJump(new Vector3(0, i, 0), 1, 1 /*y ekle i kullanarak */ , .1f);
+                movingBreadList.Add(bakedStandList[0]);
+                bakedStandList.RemoveAt(0);
 
+            }
+            yield return new WaitForSeconds(1f);
+            for (int i = 0; i < movingBreadList.Count; i++)
+            {
+                movingBreadList[i].gameObject.transform.DOLocalMove(new Vector3(0, i, 0), /*y ekle i kullanarak */ .1f);
+            }
         }
-        yield return new WaitForSeconds(1f);
-        for (int i = 0; i < movingBreadList.Count; i++)
-        {
-            movingBreadList[i].gameObject.transform.DOLocalMove(new Vector3(0, i, 0), /*y ekle i kullanarak */ .1f);
-        }
-
     }
     void SellBreadMechanic()
     {
