@@ -16,7 +16,7 @@ public class GameManager : MonoBehaviour
 
     public int money = 0;
     public TextMeshProUGUI moneyText;
-    public GameObject moneyObject;
+    public GameObject moneyObject, coinObject;
 
     private void Awake() => instance = this;
 

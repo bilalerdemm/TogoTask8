@@ -4,13 +4,14 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Customers : MonoBehaviour
 {
     public PathCreator pathCreator;
     public float speed = 5f;
     float distanceTravelled;
-    
+
     public Animator customerAnim;
 
     private void Update()
@@ -20,7 +21,7 @@ public class Customers : MonoBehaviour
         {
             customerAnim.SetBool("isRunning", true);
             distanceTravelled += speed * Time.deltaTime;
-            transform.position = pathCreator.path.GetPointAtDistance(distanceTravelled) + new Vector3 (0,2,0);
+            transform.position = pathCreator.path.GetPointAtDistance(distanceTravelled) + new Vector3(0, 2, 0);
 
         }
     }
@@ -33,14 +34,27 @@ public class Customers : MonoBehaviour
             PathMovement.instance.finalBreadList[PathMovement.instance.finalBreadList.Count - 1].gameObject.transform.DOLocalMove(new Vector3(0, 5, 1), .5f);
             PathMovement.instance.finalBreadList[PathMovement.instance.finalBreadList.Count - 1].gameObject.transform.parent = transform;
             PathMovement.instance.finalBreadList.RemoveAt(PathMovement.instance.finalBreadList.Count - 1);
-            GameManager.instance.money += 5;
-            GameManager.instance.moneyText.text = GameManager.instance.money.ToString();
-            GameManager.instance.moneyObject.transform.DOScale(new Vector3(1.35f, 1.35f, 1.35f), .35f).OnComplete(() =>
-            {
-                GameManager.instance.moneyObject.transform.DOScale(new Vector3(1f, 1f, 1f), .35f);
-            });
-            transform.DOLocalRotate(new Vector3(transform.rotation.x,180,transform.rotation.z),1f);
+
+            MoneyAction();
+
+            transform.DOLocalRotate(new Vector3(transform.rotation.x, 180, transform.rotation.z), 1f);
         }
+    }
+    void MoneyAction()
+    {
+        GameManager.instance.coinObject.GetComponent<Image>().DOFade(1f, .005f);
+        GameManager.instance.money += 5;
+        GameManager.instance.moneyText.text = GameManager.instance.money.ToString();
+        GameManager.instance.moneyObject.transform.DOScale(new Vector3(1.35f, 1.35f, 1.35f), .35f).OnComplete(() =>
+        {
+            GameManager.instance.moneyObject.transform.DOScale(new Vector3(1f, 1f, 1f), .35f);
+        });
+        GameManager.instance.coinObject.SetActive(true);
+        GameManager.instance.coinObject.transform.DOMoveY(1800, 1f);
+        GameManager.instance.coinObject.GetComponent<Image>().DOFade(0f, .75f).OnComplete(() =>
+        {
+            GameManager.instance.coinObject.transform.DOMoveY(1600, 1f);
+        });
     }
     public void CustomerBuy()
     {
